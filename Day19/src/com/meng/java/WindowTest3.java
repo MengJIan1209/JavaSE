@@ -17,7 +17,8 @@ public class WindowTest3 {
 
     public static void main(String[] args) {
 
-        MengThread mengThread1 = new MengThread();
+//        MengThread mengThread1 = new MengThread();
+        MengThread1 mengThread1 = new MengThread1();
 
         Thread t1 = new Thread(mengThread1);
         Thread t2 = new Thread(mengThread1);
