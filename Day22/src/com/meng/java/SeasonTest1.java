@@ -1,7 +1,5 @@
 package com.meng.java;
 
-import com.meng.java1.MyAnnotation;
-
 /**
  *  使用enum关键字 定义枚举类
  *
@@ -47,7 +45,7 @@ public class SeasonTest1 {
 
 }
 
-@MyAnnotation(value = "Hello")
+
 interface  Info{
     void show();
 }
