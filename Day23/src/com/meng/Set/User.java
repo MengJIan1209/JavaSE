@@ -19,19 +19,26 @@ public class User implements Comparable{
         this.age = age;
     }
 
-    public void setAge(){
-        this.age = age;
-    }
+//    public void setAge(){
+//        this.age = age;
+//    }
 
-    public int getAge(int age){
+    public int getAge() {
         return age;
     }
 
-    public void setName(){
+    public void setAge(int age) {
+        this.age = age;
+    }
+//    public int getAge(int age){
+//        return age;
+//    }
+
+    public void setName(String name){
         this.name = name;
     }
 
-    public String getName(String name){
+    public String getName(){
         return name;
     }
 
@@ -75,4 +82,5 @@ public class User implements Comparable{
         }
 
     }
+
 }
