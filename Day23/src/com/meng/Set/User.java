@@ -58,6 +58,7 @@ public class User implements Comparable{
     }
 
 
+    //按照姓名从小到大排列，年龄从小到大排列
     @Override
     public int compareTo(Object o) {
         if (o instanceof  User){
