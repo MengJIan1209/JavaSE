@@ -10,8 +10,11 @@ import java.util.List;
  */
 public class ListTest {
 
+    
+
     @Test
     public void testListRemove() {
+
         List list = new ArrayList();
         list.add(1);
         list.add(2);
