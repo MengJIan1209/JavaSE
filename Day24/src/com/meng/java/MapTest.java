@@ -10,7 +10,7 @@ package com.meng.java;
          |----TreeMap： 保证按照添加的key - value对 进行排序，实现排序遍历。 此时考虑key的自然排序或定制排序
                             底层使用红黑树
          |----HashTable： 作为古老的实现类  ：线程安全的，效率低。 不能存储null的key和value
-              |----Properties：
+              |----Properties：常用来处理陪着文件，key和value都是String类型
 
 
          HashMap的底层：  数组+链表(JDK 7.0及之前)
@@ -42,7 +42,7 @@ package com.meng.java;
 
          补充：关于情况2和情况3，此时的key1-value1和原来的数据以链表的方式存储
 
-         在不断地添加过程中，会涉及到扩容问题，默认的扩容方式，扩容为原来的2倍，并将原来的数据复制过来
+         在不断地添加过程中，会涉及到扩容问题，当超出临界值(且要存放的位置非空)时，扩容。默认的扩容方式，扩容为原来的2倍，并将原来的数据复制过来
 
          JDK 8相较于JDK 7在底层实现方面的不同，
          1.new HashMap();  底层没有创建一个长度为16的数组
@@ -52,18 +52,186 @@ package com.meng.java;
            当数组的某一个索引位置上的元素以链表形式存在的数据个数 > 8，且当前的数组的长度 > 64时
            此时此索引位置上的所有数据改为使用红黑树的形式存储。
 
+           DEFAULT_INITIAL_CAPACITY:  HashMap的默认容量 ：16
+           DEFAULT_LOAD_FACTOR : HashMap的默认加载因子 ：0.75
+           threshold：扩容的临界值， = 容量 * 加载因子 ： 16 * 0.75 = 12；
+           TREEIFY_THRESHOLD : Bucket中链表长度大于该默认值，转化为红黑树 ： 8
+           MIN_TREEIFY_CAPACITY : 桶中的Node被树化时最小的hash表容量： 64
+
+    四、LinkedHashMap的底层实现原理 (了解)
+        源码中：
+        static class Entry<K,V> extends HashMap.Node<K,V> {
+        Entry<K,V> before, after;
+        Entry(int hash, K key, V value, Node<K,V> next) {
+            super(hash, key, value, next);
+        }
+    }
+
+    五、Map中定义的方法
+     添加、删除、修改操作：
+     Object put(Object key,Object value)：将指定key-value添加到(或修改)当前map对象中
+     void putAll(Map m):将m中的所有key-value对存放到当前map中
+     Object remove(Object key)：移除指定key的key-value对，并返回value
+     void clear()：清空当前map中的所有数据
+     元素查询的操作：
+     Object get(Object key)：获取指定key对应的value
+     boolean containsKey(Object key)：是否包含指定的key
+     boolean containsValue(Object value)：是否包含指定的value
+     int size()：返回map中key-value对的个数
+     boolean isEmpty()：判断当前map是否为空
+     boolean equals(Object obj)：判断当前map和参数对象obj是否相等
+     元视图操作的方法：
+     Set keySet()：返回所有key构成的Set集合
+     Collection values()：返回所有value构成的Collection集合
+     Set entrySet()：返回所有key-value对构成的Set集合
+
+      总结：常用方法
+      增：put(Object key,Object value)
+      删：remove(Object key)
+      改：put(Object key,Object value)
+      查：get(Object key)
+      长度：size()
+      遍历：keySet() / values() / entrySet()
+
  */
 
 import org.junit.Test;
 
-import java.util.HashMap;
+import java.util.*;
 
 public class MapTest {
+    /*
+     元视图操作的方法：
+     Set keySet()：返回所有key构成的Set集合
+     Collection values()：返回所有value构成的Collection集合
+     Set entrySet()：返回所有key-value对构成的Set集合
+     */
+    @Test
+    public void test3(){
+        Map map = new HashMap();
+        map.put("AA",123);
+        map.put("DD",13);
+        map.put(22,63);
+        map.put(33,16);
+
+        //遍历所有的key集：keySet()
+        Set set = map.keySet();
+        Iterator iterator = set.iterator();
+        while(iterator.hasNext()){
+            System.out.println(iterator.next());
+        }
+        System.out.println();
+        //遍历所有的values集 ：
+        // Collection values()：返回所有value构成的Collection集合
+        Collection values = map.values();
+        for(Object obj : values){
+            System.out.println(obj);
+        }
+        System.out.println();
+        //遍历所有的key-value：
+        // 方式一：Set entrySet()：返回所有key-value对构成的Set集合
+        Set entrySet = map.entrySet();
+//        for (Object obj1 : entrySet){
+//            System.out.println(obj1);
+//        }
+        System.out.println();
+        Iterator iterator1 = entrySet.iterator();
+        while(iterator1.hasNext()){
+            Object obj = iterator1.next();
+            //entrySet集合中的元素都是entry
+            Map.Entry entry= (Map.Entry) obj;
+            System.out.println(entry.getKey()+ "---->"+entry.getValue());
+        }
+        System.out.println();
+        //方式二：
+        Set keySet = map.keySet();
+        Iterator iterator2 = set.iterator();
+        while(iterator2.hasNext()){
+            Object key = iterator2.next();
+            Object value = map.get(key);
+            System.out.println(key +"===="+value);
+        }
+    }
+
+
+
+    /*
+     元素查询的操作：
+     Object get(Object key)：获取指定key对应的value
+     boolean containsKey(Object key)：是否包含指定的key
+     boolean containsValue(Object value)：是否包含指定的value
+     int size()：返回map中key-value对的个数
+     boolean isEmpty()：判断当前map是否为空
+     boolean equals(Object obj)：判断当前map和参数对象obj是否相等
+
+     */
 
     @Test
-    public void test1(){
-        HashMap map = new HashMap();
+    public void test2(){
+        Map map = new HashMap();
+        map.put("AA",123);
+        map.put("DD",13);
+        map.put(22,63);
+        map.put(33,16);
 
+        // Object get(Object key)：获取指定key对应的value
+        System.out.println(map.get("AA"));
+
+        // boolean containsKey(Object key)：是否包含指定的key
+        boolean isExist = map.containsKey("DD");
+        System.out.println(isExist);
+
+        isExist = map.containsValue(63);
+        System.out.println(isExist);
+
+        //  boolean isEmpty()：判断当前map是否为空
+        map.clear();
+        System.out.println(map.isEmpty());
+    }
+
+
+
+    /*
+     添加、删除、修改操作：
+     Object put(Object key,Object value)：将指定key-value添加到(或修改)当前map对象中
+     void putAll(Map m):将m中的所有key-value对存放到当前map中
+     Object remove(Object key)：移除指定key的key-value对，并返回value
+     void clear()：清空当前map中的所有数据
+     */
+    @Test
+    public void test1(){
+        Map map = new HashMap();
+
+//        map = new LinkedHashMap();
+        //添加操作：1.Object put(Object key,Object value)：将指定key-value添加到(或修改)当前map对象中
+        map.put(123,"AA");
+        map.put(345,"BB");
+        map.put(12,"CC");
+//        System.out.println(map);
+        //修改操作：
+        map.put(123,"DD");
+        System.out.println(map);
+
+        Map map1 = new HashMap();
+        map1.put(124,45);
+        map1.put("EE",22);
+        map1.put("GG",222);
+
+        //2.void putAll(Map m):将m中的所有key-value对存放到当前map中
+        map.putAll(map1);
+        System.out.println(map);
+
+        //remove(Object value)
+        Object value = map.remove("EE");
+        System.out.println(value);
+
+        System.out.println(map);
+
+        //clear()
+        map.clear(); //与 map = null; 不同
+        System.out.println(map.size());
+
+        System.out.println(map);
 
     }
 
