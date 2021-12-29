@@ -90,6 +90,7 @@ public class GenericTest {
 
 //         map.put(123,"Jsd");
 
+        //泛型的嵌套
         Set<Map.Entry<String,Integer>> entry =  map.entrySet();
         Iterator<Map.Entry<String, Integer>> iterator = entry.iterator();
 
