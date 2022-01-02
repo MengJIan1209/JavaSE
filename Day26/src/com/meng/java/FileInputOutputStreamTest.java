@@ -97,7 +97,7 @@ public class FileInputOutputStreamTest {
             fis = new FileInputStream(srcFile);
             fos = new FileOutputStream(destFile);
 
-            byte[] buffer = new byte[5];
+            byte[] buffer = new byte[1024];
             int len;
             while ((len = fis.read(buffer)) != -1){
                 fos.write(buffer,0,len);
@@ -128,11 +128,11 @@ public class FileInputOutputStreamTest {
     public void testCopyFile(){
         long start = System.currentTimeMillis();
 
-//        String srcPath = "D:\\Desktop\\尚硅谷-03-常见的DBMS的对比.mp4";
-//        String destPath = "D:\\Desktop\\尚硅谷-03-常见的DBMS的对比1.mp4";
+        String srcPath = "D:\\Desktop\\尚硅谷-03-常见的DBMS的对比.mp4";
+        String destPath = "D:\\Desktop\\尚硅谷-03-常见的DBMS的对比1.mp4";
 
-        String srcPath = "hello.txt";
-        String destPath = "hello3.txt";
+//        String srcPath = "hello.txt";
+//        String destPath = "hello3.txt";
         copyFile(srcPath,destPath);
 
         long end = System.currentTimeMillis();
