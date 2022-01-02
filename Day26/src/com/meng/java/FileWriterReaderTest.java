@@ -2,13 +2,20 @@ package com.meng.java;
 
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 /*
+    一、流的分类
+    1.操作数据单位：字节流， 字符流
+    2.数据的流向： 输入流， 输出流
+    3.流的角色： 节点流， 处理流
 
+    二、流的体系
+    抽象基类                节点流(或文件流)               缓冲流(处理流的一种)
+    InputStream            FileInputStream             BufferedInputStream
+    OutputStream           FileOutputStream            BufferedOutputStream
+    Reader                 FileReader                  BufferedReader
+    Writer                 FileWriter                  BufferedWriter
 
  */
 public class FileWriterReaderTest {
@@ -114,20 +121,74 @@ public class FileWriterReaderTest {
          */
 
         @Test
-    public void test3() throws IOException {
+    public void test3(){
             //1.提供File类的对象，指明写出到的文件
-            File file = new File("hello1.txt");
+            FileWriter fw = null;
+            try {
+                File file = new File("hello1.txt");
 
-            //2.FileWriter流的实例化
-            FileWriter fw = new FileWriter(file);
+                //2.FileWriter流的实例化
+                fw = new FileWriter(file);
 
-            //3.写入操作
-            fw.write("我是图图小淘气\n");
-            fw.write("面对世界很好奇");
+                //3.写入操作
+                fw.write("我是图图小淘气\n");
+                fw.write("面对世界很好奇");
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                //4.流资源的关闭
+                if (fw != null){
+                    try {
+                        fw.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-            //4.流资源的关闭
-            fw.close();
+                }
+            }
 
         }
+
+        @Test
+    public void testFileReaderFileWriter(){
+            FileReader fr = null;
+            FileWriter fw = null;
+            try {
+                //1.创建File类的对象，指明读入和写出的文件
+                File srcFile = new File("hello.txt");
+                File destFile = new File("hello2.txt");
+
+                //2.创建输入流和输出流的对象
+                fr = new FileReader(srcFile);
+                fw = new FileWriter(destFile);
+
+                //3.数据的读入和写出操作
+                char[] cbuf = new char[5];
+                int len ;
+                while ((len = fr.read(cbuf)) != -1){
+                    //每次写出len个字符
+                    fw.write(cbuf,0,len);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+            //4.关闭流资源
+                if (fw != null){
+                    try {
+                        fw.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (fr != null){
+                    try {
+                        fr.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
 
 }
