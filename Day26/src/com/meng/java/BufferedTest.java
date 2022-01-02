@@ -59,7 +59,7 @@ public class BufferedTest {
                     e.printStackTrace();
                 }
             }
-            if (bos != bos){
+            if (bos != null){
                 try {
                     bos.close();
                 } catch (IOException e) {
@@ -122,7 +122,7 @@ public class BufferedTest {
                     e.printStackTrace();
                 }
             }
-            if (bos != bos) {
+            if (bos != null) {
                 try {
                     bos.close();
                 } catch (IOException e) {
