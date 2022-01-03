@@ -8,6 +8,11 @@ package com.meng.java;
       BufferedReader
       BufferedWriter
 
+      2.作用： 提高流的读取，写入的速度
+        提高写入速度的原因：内部提供了一个缓冲区
+
+      3.处理流：就是“套接”在已有流的基础上
+
  */
 
 import org.junit.Test;
@@ -146,6 +151,67 @@ public class BufferedTest {
         long end = System.currentTimeMillis();
 
         System.out.println("复制花费的时间为："+(end - start)); // 177
+
+    }
+
+    @Test
+    public void testBufferedReaderWriter(){
+        BufferedReader br = null;
+        BufferedWriter bw = null;
+        try {
+            //1.造对象
+            File srcFile = new File("dbcp.txt");
+            File destFile = new File("dbcp1.txt");
+
+            //2.造流的对象
+            FileReader fr = new FileReader(srcFile);
+            FileWriter fw = new FileWriter(destFile);
+
+            br = new BufferedReader(fr);
+            bw = new BufferedWriter(fw);
+
+            //3.读写操作
+            //方式一：使用char[] 数组
+//            char[] cbuf = new char[1024];
+//            int len;
+//            while ((len = br.read(cbuf)) != -1){
+//                bw.write(cbuf,0,len);
+//    //            bw.flush();
+//            }
+
+            //方式二：使用String
+            String data;
+            while ((data = br.readLine()) != null){
+                //方法一：
+//                bw.write(data+"\n"); // data中不包含换行符
+                //方法二：
+                bw.write(data);
+                bw.newLine();
+            }
+            System.out.println("复制成功！");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+                //4.关闭流资源
+            if (bw != null){
+                try {
+                    bw.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (br != null){
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+
+
 
     }
 
